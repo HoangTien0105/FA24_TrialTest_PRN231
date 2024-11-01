@@ -24,8 +24,8 @@ namespace PE_PRN231_FA24_TrialTest_VanHoangTien_BE.Controllers
             var results = await _personService.GetAllPersons();
 
             return Ok(results);
-        }        
-        
+        }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetPersonById(int id)
@@ -36,6 +36,7 @@ namespace PE_PRN231_FA24_TrialTest_VanHoangTien_BE.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "doctor")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePersonWithVirusDTO person)
         {
             try
@@ -56,8 +57,8 @@ namespace PE_PRN231_FA24_TrialTest_VanHoangTien_BE.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "3")]
-        public async Task<IActionResult> Create([FromBody]CreatePersonWithVirusDTO person)
+        [Authorize(Roles = "doctor")]
+        public async Task<IActionResult> Create([FromBody] CreatePersonWithVirusDTO person)
         {
             try
             {
@@ -73,10 +74,30 @@ namespace PE_PRN231_FA24_TrialTest_VanHoangTien_BE.Controllers
             }
             catch (Exception ex)
             {
+                return StatusCode(400, new { error = ex.Message });
+            }
+        }
 
-                return StatusCode(400, new {error = ex.Message});
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "doctor")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+                {
+                await _personService.Delete(id);
+
+                var response = new
+                {
+                    message = "Person and viruses deleted successfully"
+                };
+
+                return Ok(response);
             }
 
+            catch (Exception ex)
+            {
+                return StatusCode(400, new { error = ex.Message });
+            }
         }
     }
 }

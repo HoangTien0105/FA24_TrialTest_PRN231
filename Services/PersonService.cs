@@ -7,6 +7,7 @@ using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -74,6 +75,39 @@ namespace Services
             }
         }
 
+        public async Task Delete(int id)
+        {
+            try
+            {
+                var personExist = _personRepository.GetAll(filter: e => e.PersonId == id, includeProperties: "PersonViruses").FirstOrDefault();
+
+                if (personExist == null)
+                {
+                    throw new Exception("User not found");
+                }
+
+                
+                foreach(var item in personExist.PersonViruses)
+                {
+                    var virusExist = _personVirusRepository.GetAll(filter: e => e.PersonId == item.PersonId).FirstOrDefault();
+
+                    if (virusExist == null)
+                    {
+                        throw new Exception("Vrius not found");
+                    }
+
+                    _personVirusRepository.Delete(virusExist);
+                }
+
+                _personRepository.Delete(personExist);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<List<PersonDTO>> GetAllPersons()
         {
             var personList = _personRepository.GetAll(includeProperties: "PersonViruses.Virus");
@@ -103,7 +137,7 @@ namespace Services
 
         public async Task<PersonDTO> GetPersonById(int id)
         {
-            var person = _personRepository.GetAll(filter: x => x.UserId == id, includeProperties: "PersonViruses.Virus").FirstOrDefault();
+            var person = _personRepository.GetAll(filter: x => x.PersonId == id, includeProperties: "PersonViruses.Virus").FirstOrDefault();
 
             PersonDTO personDTO = new PersonDTO
             {

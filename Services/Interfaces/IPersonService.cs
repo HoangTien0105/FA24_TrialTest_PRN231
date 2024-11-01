@@ -14,5 +14,6 @@ namespace Services.Interfaces
         Task<PersonDTO> GetPersonById(int id);
         Task Create(CreatePersonWithVirusDTO createPersonWithVirusDTO);
         Task Update(int id, UpdatePersonWithVirusDTO updatePersonWithVirusDTO);
+        Task Delete(int id);
     }
 }

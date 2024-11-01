@@ -76,7 +76,7 @@ public partial class ViroCureFal2024dbContext : DbContext
 
             entity.HasOne(d => d.Person).WithMany(p => p.PersonViruses)
                 .HasForeignKey(d => d.PersonId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__person_vi__perso__2D27B809");
 
             entity.HasOne(d => d.Virus).WithMany(p => p.PersonViruses)

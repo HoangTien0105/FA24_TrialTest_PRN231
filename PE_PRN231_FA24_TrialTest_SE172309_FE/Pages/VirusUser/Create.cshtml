@@ -1,0 +1,61 @@
+﻿@page
+@model PE_PRN231_FA24_TrialTest_SE172309_FE.Pages.VirusUser.CreateModel
+
+<h2>Create New Person</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<form method="post">
+    <div>
+        <label asp-for="NewPerson.Fullname"></label>
+        <input asp-for="NewPerson.Fullname" />
+        <span asp-validation-for="NewPerson.Fullname" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="NewPerson.BirthDay"></label>
+        <input asp-for="NewPerson.BirthDay" type="date" />
+        <span asp-validation-for="NewPerson.BirthDay" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="NewPerson.Phone"></label>
+        <input asp-for="NewPerson.Phone" />
+        <span asp-validation-for="NewPerson.Phone" class="text-danger"></span>
+    </div>
+    <div>
+        <h4>Viruses</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Virus Name</th>
+                    <th>Resistance Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.NewPerson.Viruses.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input asp-for="NewPerson.Viruses[i].VirusName" />
+                            <span asp-validation-for="NewPerson.Viruses[i].VirusName" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="NewPerson.Viruses[i].ResistanceRate" />
+                            <span asp-validation-for="NewPerson.Viruses[i].ResistanceRate" class="text-danger"></span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <button type="submit">Create</button>
+    <button type="button" onclick="window.location='/VirusUser/Index'">Cancel</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

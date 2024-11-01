@@ -1,0 +1,67 @@
+﻿@page
+@model PE_PRN231_FA24_TrialTest_SE172309_FE.Pages.VirusUser.IndexModel
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using System.Collections.Generic;
+
+<h2>
+    <a asp-page="./Create">Create New</a>
+</h2>
+
+
+<h1>People list</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Persons[0].PersonId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Persons[0].Fullname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Persons[0].BirthDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Persons[0].Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Persons[0].Viruses)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    @if (Model.Persons != null && Model.Persons.Any())
+    {
+        <tbody>
+            @foreach (var person in Model.Persons)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => person.PersonId)</td>
+                    <td>@Html.DisplayFor(modelItem => person.Fullname)</td>
+                    <td>@Html.DisplayFor(modelItem => person.BirthDay)</td>
+                    <td>@Html.DisplayFor(modelItem => person.Phone)</td>
+                    <td>
+                        <ul>
+                            @foreach (var virus in person.Viruses)
+                            {
+                                <li>@virus.VirusName - Resistance: @(virus.ResistanceRate.HasValue ? virus.ResistanceRate.Value.ToString() : "N/A")</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        <a asp-page="/VirusUser/Update" asp-route-id="@person.PersonId">Edit</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@person.PersonId" style="display:inline">
+                            <button type="submit" class="btn btn-link">Delete</button>
+                        </form>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        <p>No people available.</p>
+    }
+</table>
